@@ -47,6 +47,22 @@ class Permissions {
         return true
     }
 
+    fun processAllPermissionsGranted(context: Context, activity: Activity, PERMISSION_REQUESTS: Int) {
+        val allNeededPermissions: MutableList<String?> = ArrayList()
+        for (permission in getRequiredPermissions(context)) {
+            if (!isPermissionGranted(context, permission)) {
+                allNeededPermissions.add(permission)
+            }
+        }
+        if (allNeededPermissions.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                activity,
+                allNeededPermissions.toTypedArray(),
+                PERMISSION_REQUESTS
+            )
+        }
+    }
+
     fun isPermissionGranted(context: Context, permission: String?): Boolean {
         if (ContextCompat.checkSelfPermission(context, permission!!) == PackageManager.PERMISSION_GRANTED) {
             return true
